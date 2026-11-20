@@ -1,0 +1,68 @@
+---
+title: "Composición microbiana de la rizosfera"
+author: "Fernanda Ximena Venegas Garcia"
+date: today
+lang: es
+format:
+  html:
+    toc: true
+    code-fold: true
+execute:
+  warning: false
+  message: false
+---
+
+
+
+Para colocar imágenes:
+
+[Descripción de imagen](linkdeimagen)
+
+
+Insertar codigo:
+`1+1`
+
+Chunks:
+```{r}
+
+```
+
+Aquí se puede personalizar y configurar los chunks para poder visualizar y analizar correctamente.
+
+
+```{r}
+#| eval: false
+#| label: fig-ejemplo
+#| fig-cap: "Ejemplo de una figura generada desde R"
+
+plot(1:5, (1:5)^2, pch = 19)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

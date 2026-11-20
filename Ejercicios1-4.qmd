@@ -1,0 +1,494 @@
+---
+title: "Ejercicios_Entregables"
+format: pdf
+editor: visual
+author: "Fernanda Ximena Venegas Garcia"
+---
+
+# Ejercicios sesiones 1-4
+
+Realizar una suma:
+
+```{r}
+a <- 2
+b <- 3
+suma <- a + b
+suma
+```
+
+Para instalar paquetes.
+
+```{r}
+# Instalar paquetes
+# install.packages("tidyverse")
+# install.packages("BiocManager") # Esto es necesario solo 1 vez
+# Remover paquetes:
+# remove.packages("package-to-remove")
+# Cargar los paquetes:
+library(ggplot2)
+
+# Actividad:
+# install.packages("palmerpenguins")
+# install.packages("ggplot2")
+# install.packages("dplyr")
+# install.packages("DT")
+```
+
+Instalar una versión específica de un paquete.
+
+```{r}
+# install.packages("remotes")
+remotes::install_version(
+  "dplyr",
+  version = "1.1.4",
+  repos = "https://cloud.r-project.org"
+)
+
+# Verificar si quedó instalado
+packageVersion("dplyr")
+```
+
+#### Actividad 2.11:
+
+```{r}
+R.version.string
+Sys.info()[["sysname"]]
+
+# install.packages(c("ggplot2", "dplyr")) # Solo si faltan
+library(dplyr)
+library(ggplot2)
+packageVersion("ggplot2")
+packageVersion("dplyr")
+```
+
+### Durante clase:
+
+```{r}
+identificador <- "gene_001"
+longitud <- 450L
+proporcion_gc <- 0.53
+anotado <- TRUE
+
+class(identificador)
+class(longitud)
+class(proporcion_gc)
+class(anotado)
+class(1.5)
+typeof(1.5)
+str(identificador)
+```
+
+```{r}
+genes <- c("gA", "gB", "gC", "gD")
+longitudes <- c(150, 400, 220, 510)
+
+length(genes)
+
+genes[1]
+genes[c(2, 4)]
+genes[longitudes >= 300]
+longitudes / 3
+longitudes >= 300
+sum(longitudes >= 300)
+```
+
+#### Ejercicio 1: Vectores y selección pregunta.
+
+```{r}
+# Seleccionar el tercer identificador
+ids <- c("g1", "g2", "g3", "g4", "g5")
+tam <- c(90, 450, 310, 120, 600)
+ids[3]
+# identificadores de genes con longitud de al menos 300
+ids[tam >= 300]
+# Cuantos cumplen sin usar un ciclo
+sum(tam >= 300)
+```
+
+#### Ejercicio 2:
+
+```{r}
+letras <- c("A", "M", "A", "B", "M", "M", "B", "A", "B", "B")
+nivel_factor <- factor(letras, 
+                       levels = c("B", "M", "A"), 
+                       ordered = TRUE)
+nivel_factor
+levels(nivel_factor)
+```
+
+#### Ejercicio 3:
+
+```{r}
+genes <- data.frame(
+  gen = c("TP53", "HBB", "BRCA1"),
+  longitud = c(531, 147, 219),
+  funcion = c("Supresor tumoral", "Transporte de oxigeno", "Reparacion de ADN")
+)
+
+genes_filtrados <- genes[genes$longitud > 200, ]
+genes_filtrados
+
+  lista <- list(
+  muestra = "Muestra_01",
+  datos = genes
+)
+lista
+```
+
+Una matriz no sería una buena ya que "convertiría" los números en letras, no sería posible hacer cálculos matemáticos.
+
+## Parte 4:
+
+#### Ejercicio 1:
+
+```{r}
+valores_prueba <- c(NA, -2, 0, 15)
+
+for (conteo in valores_prueba) {
+  if (is.na(conteo)) {
+    print("Dato faltante")
+  } else if (conteo < 0) {
+    print("Conteo inválido")
+  } else if (conteo == 0) {
+    print("Sin lecturas")
+  } else {
+    print("Con lecturas")
+  }
+}
+```
+
+#### Ejercicio 2:
+
+```{r}
+conteos <- c(8, 0, 13, 5, 0, 21)
+
+#Verificar si los valores son positivos
+all(conteos >= 0)
+#Determinar si existe al menos un conteo mayor que 20
+any(conteos > 20)
+#Obtener las posiciones de los conteos iguales a cero
+which(conteos == 0)
+#Crear un vector que indique "Presente" o "Ausente" si el conteo > 0
+estado <- ifelse(conteos > 0, "Presente", "Ausente")
+estado
+```
+
+#### Ejercicio 3:
+
+```{r}
+secuencias <- c("ATG", "ATGCGT", "AATTCCGG", "CG")
+longitud <- numeric(length(secuencias))
+clasificacion <- character(length(secuencias))
+
+for (i in seq_along(secuencias)) {
+  longitud[i] <- nchar(secuencias[i])
+
+  if (longitud[i] < 5) {
+    clasificacion[i] <- "Corta"
+  } else {
+    clasificacion[i] <- "Larga"
+  }
+}
+
+longitud
+
+clasificacion
+```
+
+#### Ejercicio 4:
+
+```{r}
+secuencia <- ""
+
+while (nchar(secuencia) < 8) {
+  secuencia <- paste0(secuencia, "A")
+}
+
+secuencia
+
+nchar(secuencia)
+```
+
+### Parte 5:
+
+#### Ejercicio 1:
+
+```{r}
+# Definir la función
+empieza_con <- function(secuencia, prefijo) {
+  startsWith(secuencia, prefijo)
+}
+
+# Probar la función con "ATGCGT" y los prefijos "ATG" y "TGA"
+empieza_con("ATGCGT", "ATG")
+empieza_con("ATGCGT", "TGA")
+```
+
+#### Ejercicio 2:
+
+Esto es parte del ejercicio antes de hacerlo:
+
+```{r}
+resumir_adn <- function(id, secuencia) {
+  secuencia <- toupper(secuencia)
+  bases <- strsplit(secuencia, split = "", fixed = TRUE)[[1]]
+
+  list(
+    id = id,
+    longitud = nchar(secuencia),
+    conteo_gc = sum(bases %in% c("G", "C"))
+  )
+}
+
+resultado <- resumir_adn("GEN_01", "ATGCGTAA")
+resultado
+
+resultado$id
+
+resultado[["longitud"]]
+```
+
+Ahora si, ejercicio 2:
+
+```{r}
+resumir_adn <- function(id, secuencia) {
+  secuencia <- toupper(secuencia)
+  bases <- strsplit(secuencia, "", fixed = TRUE)[[1]]
+  longitud <- length(bases)
+  conteo_gc <- sum(bases %in% c("G", "C"))
+  list(
+    id = id,
+    longitud = longitud,
+    conteo_gc = conteo_gc
+  )
+}
+
+resumir_adn("GEN_01", "ATGCGTAA")
+```
+
+#### Ejercicio 3:
+
+```{r}
+revisar_secuencias <- function(secuencias) {
+  !is.na(secuencias) & grepl("^[ACGT]+$", toupper(secuencias))
+}
+clasificar_secuencias <- function(secuencias) {
+  if (!is.character(secuencias)) {
+    stop("El argumento 'secuencias' debe ser un vector de tipo carácter.")
+  }
+  es_valida <- revisar_secuencias(secuencias)
+
+  list(
+    validas = secuencias[es_valida],
+    invalidas = secuencias[!es_valida]
+  )
+}
+
+clasificar_secuencias(c("ATGCGT", "ACNTGA", "ttacga", NA))
+```
+
+#### Ejercicio 4:
+
+```{r}
+# Aseguramos que revisar_secuencias() esté cargada en la sesión
+revisar_secuencias <- function(secuencias) {
+  !is.na(secuencias) & grepl("^[ACGT]+$", toupper(secuencias))
+}
+
+reporte_secuencias <- function(ids, secuencias) {
+  #Comprobar que ambos argumentos son vectores de caracteres y tienen la misma longitud
+  if (!is.character(ids) || !is.character(secuencias)) {
+    stop("Ambos argumentos ('ids' y 'secuencias'), ser vectores de caracteres")
+  }
+  
+  if (length(ids) != length(secuencias)) {
+    stop("Los vectores 'ids' y 'secuencias' deben tener la misma longitud")
+  }
+  
+  es_valida <- revisar_secuencias(secuencias)
+  longitudes <- ifelse(es_valida, nchar(secuencias), NA)
+  
+  #Hacer el data.frame
+  data.frame(
+    id = ids,
+    secuencia = secuencias,
+    longitud = longitudes,
+    valida = es_valida
+  )
+}
+
+ids <- c("seq_01", "seq_02", "seq_03", "seq_04")
+secuencias <- c("ATGCGT", "ACNTGA", "GGCCAA", "TTTAAA")
+
+reporte_secuencias(ids, secuencias)
+```
+
+### Parte 6:
+
+#### Ejercicio 1:
+
+```{r}
+ids <- c("seq_01", "seq_02", "seq_03", "seq_04")
+secuencias <- c("ATGCGT", "ACNTGA", "GGCCAA", "TTTAAA")
+longitudes <- nchar(secuencias)
+resultado <- data.frame(id = ids, longitud = longitudes)
+
+print(resultado)
+```
+
+### Parte 7:
+
+#### Ejercicio 1:
+
+```{r}
+ruta <- "data_raw/datos_sesion_02_blast/blast_separador_incorrecto.csv"
+file.exists(ruta)
+lineas <- readLines(ruta, n = 3)
+print(lineas)
+```
+
+Usa tabuladores como separadores.
+
+#### Ejercicio 2:
+
+```{r}
+library(readr)
+metadata <- read_csv(
+  "data_raw/datos_sesion_02_blast/metadata_secuencias.csv",
+  col_types = cols(codigo_muestra = col_character())
+)
+blast_com <- read_tsv(
+  "data_raw/datos_sesion_02_blast/blast_comentarios.tsv",
+  col_types = cols(codigo_muestra = col_character())
+)
+class(metadata)
+class(blast_com)
+head(metadata)
+head(blast_com)
+```
+
+#### Ejercicio 3:
+
+```{r}
+library(readr)
+blast <- read_tsv("data_raw/datos_sesion_02_blast/resultados_blast.tsv")
+
+dim(blast)
+length(unique(blast$query_id))
+table(blast$query_id)
+blast[blast$pident >= 95 & !is.na(blast$pident), ]
+anyNA(blast)
+```
+
+1.  ¿Cuántos registros y columnas tiene la tabla? 20 registros, 6 columnas
+
+2.  ¿Cuántos `query_id` diferentes aparecen? 8
+
+3.  ¿Cuántos resultados tiene cada consulta?
+
+    ```         
+    seq01 seq02 seq03 seq04 seq05 seq06 seq07 seq08 
+        3     2     4     1     3     2     3     2 
+    ```
+
+    ¿Qué filas tienen `pident` mayor o igual a 95? Seq03 y Seq07
+
+    ¿Hay valores faltantes? No
+
+#### Ejercicio 4:
+
+Un estudiante importa `blast_separador_incorrecto.csv` con `read_csv()` y obtiene una sola columna. ¿Significa que el archivo contiene una única variable? Explica cómo comprobarlo y corrige la importación.
+
+Probablemente el archivo no contenga una sola variable, pero si que la manera en la que se encuentra sea con separadores que no sean ",", que es lo que espera.
+
+```{r}
+# Para comprobarlo
+ruta <- "data_raw/datos_sesion_02_blast/blast_separador_incorrecto.csv"
+readLines(ruta, n = 3)
+```
+
+```{r}
+library(readr)
+datos_blast <- read_tsv(ruta)
+# Verificar que se importaron las columnnas
+dim(datos_blast)
+head(datos_blast)
+```
+
+#### Ejercicio 5:
+
+```{r}
+ruta_fasta <- "data_raw/datos_sesion_02_blast/secuencias.fasta"
+lineas_fasta <- readLines(ruta_fasta)
+encabezados <- grep("^>", lineas_fasta, value = TRUE)
+length(encabezados)
+print(encabezados)
+```
+
+#### Ejercicio 6:
+
+```{r}
+library(readr)
+blast <- read_tsv("data_raw/datos_sesion_02_blast/resultados_blast.tsv")
+metadata <- read_csv("data_raw/datos_sesion_02_blast/metadata_secuencias.csv",
+                     col_types = cols(codigo_muestra = col_character()))
+dim(blast)
+names(blast)
+str(blast)
+
+dim(metadata)
+names(metadata)
+str(metadata)
+
+unique(blast$query_id)
+table(blast$query_id)
+
+blast[blast$pident >= 90, ]
+
+
+fasta <- readLines("data_raw/datos_sesion_02_blast/secuencias.fasta")
+encabezados <- grep("^>", fasta, value = TRUE)
+length(encabezados)
+
+anyNA(blast)
+anyNA(metadata)
+```
+
+-   No hay valores faltantes en ninguna tabla
+
+-   Ambas tablas contienen query_id con los mismos 8 identificadores, aunque una tiene 8 filas y la otra 20.
+
+-   Las dos tablas usan delimitadores diferentes "/" y ","
+
+### Parte 8:
+
+#### Ejercicio 3 (el que me tocó hacer):
+
+```{r}
+library(dplyr)
+library(readr)
+library(tidyr) 
+
+expresion <- read_csv("data_raw/datos_sesion_03_dplyr/conteos_genes.csv") %>%
+  pivot_longer(
+    cols = starts_with("muestra_"),
+    names_to = "muestra",
+    values_to = "conteo"
+  )
+expresion %>%
+  group_by(muestra) %>%
+  summarise(promedio = mean(conteo))
+expresion <- expresion %>%
+  group_by(muestra) %>%
+  mutate(promedio_muestra = mean(conteo)) %>%
+  ungroup()
+genes_doble <- expresion %>%
+  filter(conteo >= 2 * promedio_muestra)
+
+print(genes_doble)
+genes_doble %>%
+  group_by(muestra) %>% 
+  summarise(n_genes = n())
+```
+
+Dependerá de la muestra, ya que la secuenciación puede cambiar el tamaño de la librería y de los resultados. El promedio por muestra nos ayuda a dejarlo normalizado.
